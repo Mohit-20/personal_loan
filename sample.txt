@@ -2,3 +2,18 @@
 
 eligibleLoanAmount = Math.floor((maxEligibleEmi * ((1 - Math.pow((1 + (defaultRoi / 12)), (-maxTenure))) / (defaultRoi / 12))) / 1000) * 1000;
 emi = (loanAmount * (roi/12)) / (1 - Math.pow((1 + (roi/12)), (-tenure)));
+
+
+
+Loan Calculator body { margin: 0; font-family: 'Segoe UI', sans-serif; background: linear-gradient(to right, #232526, #414345); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; } .container { text-align: center; } h1 { font-size: 2.5rem; margin-bottom: 2rem; } .btn { padding: 1rem 2rem; margin: 1rem; border: none; background: #00c6ff; background: linear-gradient(to right, #0072ff, #00c6ff); color: white; font-size: 1.2rem; border-radius: 10px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; } .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.3); } iframe { display: none; width: 100%; height: 100vh; border: none; } .note { margin-top: 40px; font-size: 0.95rem; color: #ccc; } 
+
+Loan Calculator Calculate Loan Amount Calculate EMI 
+
+Formulas used:
+
+Loan Amount: LoanAmount = Math.floor((EMI × ((1 - (1 + R)^-N) / R)) / 1000) × 1000
+
+EMI: EMI = (Loan × R) / (1 - (1 + R)^-N)
+
+Where R = ROI / 12 / 100 (monthly interest in decimal), N = Tenure (months)
+
