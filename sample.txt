@@ -1,0 +1,4 @@
+// personal loan formulas
+
+eligibleLoanAmount = Math.floor((maxEligibleEmi * ((1 - Math.pow((1 + (defaultRoi / 12)), (-maxTenure))) / (defaultRoi / 12))) / 1000) * 1000;
+emi = (loanAmount * (roi/12)) / (1 - Math.pow((1 + (roi/12)), (-tenure)));
