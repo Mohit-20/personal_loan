@@ -45,6 +45,11 @@
       height: 100vh;
       border: none;
     }
+    .note {
+      margin-top: 40px;
+      font-size: 0.95rem;
+      color: #ccc;
+    }
   </style>
 </head>
 <body>
@@ -52,10 +57,12 @@
     <h1>Loan Calculator</h1>
     <button class="btn" onclick="window.location.href='loan-amount.html'">Calculate Loan Amount</button>
     <button class="btn" onclick="window.location.href='emi.html'">Calculate EMI</button>
+    <div class="note">
+      <p><strong>Formulas used:</strong></p>
+      <p><strong>Loan Amount:</strong> <code>LoanAmount = Math.floor((EMI × ((1 - (1 + R)^-N) / R)) / 1000) × 1000</code></p>
+      <p><strong>EMI:</strong> <code>EMI = (Loan × R) / (1 - (1 + R)^-N)</code></p>
+      <p>Where R = ROI / 12 / 100 (monthly interest in decimal), N = Tenure (months)</p>
+    </div>
   </div>
 </body>
 </html>
-
-<!-- Save next file as loan-amount.html -->
-<!-- Save next file as emi.html -->
-
