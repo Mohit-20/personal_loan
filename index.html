@@ -13,21 +13,19 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    .container {
-      text-align: center;
+      justify-content: flex-start;
+      padding: 2rem;
+      min-height: 100vh;
     }
     h1 {
       font-size: 2.5rem;
       margin-bottom: 2rem;
+      text-align: center;
     }
     .btn {
       padding: 1rem 2rem;
       margin: 1rem;
       border: none;
-      background: #00c6ff;
       background: linear-gradient(to right, #0072ff, #00c6ff);
       color: white;
       font-size: 1.2rem;
@@ -39,30 +37,109 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 15px rgba(0,0,0,0.3);
     }
-    iframe {
+    .calculator {
       display: none;
+      flex-direction: column;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       width: 100%;
-      height: 100vh;
+      max-width: 400px;
+    }
+    label {
+      font-weight: 500;
+    }
+    input {
+      padding: 0.7rem;
+      border-radius: 0.5rem;
       border: none;
+      font-size: 1rem;
+      width: 100%;
+    }
+    .result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-align: center;
     }
     .note {
-      margin-top: 40px;
+      margin-top: 3rem;
       font-size: 0.95rem;
       color: #ccc;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Loan Calculator</h1>
-    <button class="btn" onclick="window.location.href='loan-amount.html'">Calculate Loan Amount</button>
-    <button class="btn" onclick="window.location.href='emi.html'">Calculate EMI</button>
-    <div class="note">
-      <p><strong>Formulas used:</strong></p>
-      <p><strong>Loan Amount:</strong> <code>LoanAmount = Math.floor((EMI × ((1 - (1 + R)^-N) / R)) / 1000) × 1000</code></p>
-      <p><strong>EMI:</strong> <code>EMI = (Loan × R) / (1 - (1 + R)^-N)</code></p>
-      <p>Where R = ROI / 12 / 100 (monthly interest in decimal), N = Tenure (months)</p>
-    </div>
+  <h1>Loan Calculator</h1>
+  <div>
+    <button class="btn" onclick="showCalc('loan')">Calculate Loan Amount</button>
+    <button class="btn" onclick="showCalc('emi')">Calculate EMI</button>
   </div>
+
+  <div id="loanCalc" class="calculator">
+    <label>Eligible EMI:</label>
+    <input type="number" id="eligibleEmi" placeholder="e.g. 5000">
+    <label>ROI (%):</label>
+    <input type="number" id="loanRoi" placeholder="e.g. 16">
+    <label>Tenure (months):</label>
+    <input type="number" id="loanTenure" placeholder="e.g. 24">
+    <button class="btn" onclick="calculateLoanAmount()">Calculate</button>
+    <div class="result" id="loanResult"></div>
+  </div>
+
+  <div id="emiCalc" class="calculator">
+    <label>Loan Amount:</label>
+    <input type="number" id="loanAmount" placeholder="e.g. 100000">
+    <label>ROI (%):</label>
+    <input type="number" id="emiRoi" placeholder="e.g. 16">
+    <label>Tenure (months):</label>
+    <input type="number" id="emiTenure" placeholder="e.g. 24">
+    <button class="btn" onclick="calculateEmi()">Calculate</button>
+    <div class="result" id="emiResult"></div>
+  </div>
+
+  <div class="note">
+    <p><strong>Formulas used:</strong></p>
+    <p><strong>Loan Amount:</strong> Loan = EMI × [(1 - (1 + R)<sup>-N</sup>) / R]</p>
+    <p><strong>EMI:</strong> EMI = [Loan × R] / [1 - (1 + R)<sup>-N</sup>]</p>
+    <p>Where R = ROI / 12 / 100 and N = Tenure in months</p>
+  </div>
+
+  <script>
+    function showCalc(type) {
+      document.getElementById('loanCalc').style.display = 'none';
+      document.getElementById('emiCalc').style.display = 'none';
+      if (type === 'loan') document.getElementById('loanCalc').style.display = 'flex';
+      else document.getElementById('emiCalc').style.display = 'flex';
+    }
+
+    function calculateLoanAmount() {
+      const emi = parseFloat(document.getElementById('eligibleEmi').value);
+      const roi = parseFloat(document.getElementById('loanRoi').value) / 100 / 12;
+      const tenure = parseInt(document.getElementById('loanTenure').value);
+
+      if (!emi || !roi || !tenure) return;
+
+      const factor = (1 - Math.pow(1 + roi, -tenure)) / roi;
+      const loan = Math.floor((emi * factor) / 1000) * 1000;
+
+      document.getElementById('loanResult').innerText = `Eligible Loan Amount: ₹${loan.toLocaleString()}`;
+    }
+
+    function calculateEmi() {
+      const loan = parseFloat(document.getElementById('loanAmount').value);
+      const roi = parseFloat(document.getElementById('emiRoi').value) / 100 / 12;
+      const tenure = parseInt(document.getElementById('emiTenure').value);
+
+      if (!loan || !roi || !tenure) return;
+
+      const emi = (loan * roi) / (1 - Math.pow(1 + roi, -tenure));
+
+      document.getElementById('emiResult').innerText = `Monthly EMI: ₹${Math.round(emi).toLocaleString()}`;
+    }
+  </script>
 </body>
 </html>
